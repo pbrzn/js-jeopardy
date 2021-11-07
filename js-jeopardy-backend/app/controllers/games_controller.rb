@@ -10,7 +10,7 @@ class GamesController < ApplicationController
   end
 
   def create
-    game = Game.create
+    game = Game.create(category_ids: params[:category_ids], username: params[:username])
     render json: GameSerializer.new(game).to_serialized_json
   end
 

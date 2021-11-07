@@ -22,7 +22,7 @@ class Category {
     .then(function(json) {
       let counter = 6
       while (counter > 0) {
-        arr.push(Math.floor(Math.random() * (json.length-1))+1)
+        arr.push(Math.ceil(Math.random() * json.length))
         counter--;
       }
     })

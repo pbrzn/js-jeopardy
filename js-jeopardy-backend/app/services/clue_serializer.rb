@@ -5,7 +5,7 @@ class ClueSerializer
 
   def to_serialized_json
     pp @clue.to_json(:include => {
-      :category => {:only => :name}
+      :category => {:only => [:id, :name]}
       }, :except => [:created_at, :updated_at])
   end
 end

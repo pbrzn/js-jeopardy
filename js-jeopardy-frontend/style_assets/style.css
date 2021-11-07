@@ -1,0 +1,70 @@
+body {
+  background-color: gray;
+  font-family: georgia;
+  color: white;
+  text-shadow: 2px 2px 4px #000000;
+}
+
+#container {
+  background-color: black;
+  width: 1200px;
+  height: 1200px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.bubble {
+  border-radius: 25px;
+  background-color: blue;
+  margin-left: auto;
+  margin-right: auto;
+  margin-top: auto;
+  margin-bottom: auto;
+  text-align: center;
+}
+
+.category-bubble {
+  border-radius: 25px;
+  display: inline-block;
+  background-color: blue;
+  text-align: center;
+  width: 70px;
+  height: 50px;
+}
+
+.clue-bubble {
+  border-radius: 25px;
+  display: inline-block;
+  background-color: blue;
+  text-align: center;
+  width: 70px;
+  height: 50px;
+}
+
+.bubble#master-bubble {
+  display: flex;
+  width: 700px;
+  height: 500px;
+}
+
+#logo {
+  width: 395px;
+  height: 116px;
+  display: flex;
+  margin-left: auto;
+  margin-right: auto;
+  padding: 20px;
+}
+
+.bubble-text {
+  margin-left: auto;
+  margin-right: auto;
+  margin-top: auto;
+  margin-bottom: auto;
+  padding-left: 10px;
+  padding-right: 10px;
+}
+
+.bubble-text#welcome {
+  font-size: 40pt;
+}
