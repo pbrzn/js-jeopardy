@@ -1,6 +1,7 @@
 class Game < ApplicationRecord
   has_many :game_categories
   has_many :categories, through: :game_categories
+  has_many :clues, through: :categories
 
   def add_categories
     num = (1..Category.all.length).to_a.shuffle
