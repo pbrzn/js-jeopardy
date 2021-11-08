@@ -1,14 +1,18 @@
 class Category {
-  assignProperties(id) {
-    const category = this;
+  constructor(id, name, clues) {
+    this.id = id;
+    this.name = name;
+    this.clues = clues;
+  }
+
+  static fetchCategoryInfo(id) {
+    let categoryObj = {}
     fetch(`http://localhost:3000/categories/${id}`)
     .then(resp => resp.json())
     .then(function(json) {
-      category.id = json.id;
-      category.name = json.name;
-      category.clues = json.clues
+      Object.assign(categoryObj, { id: json.id, name: json.name, clues: json.clues })
     })
-    return this;
+    return categoryObj
   }
 
   collectClueIds() {
@@ -22,8 +26,11 @@ class Category {
     .then(function(json) {
       let counter = 6
       while (counter > 0) {
-        arr.push(Math.ceil(Math.random() * json.length))
-        counter--;
+        let num = Math.ceil(Math.random() * json.length)
+        if (!arr.includes(num)) {
+          arr.push(num)
+          counter--;
+        }
       }
     })
     return arr;
@@ -32,7 +39,9 @@ class Category {
   static buildEnMasse(arrayOfIds) {
     const categories = []
     for (let i = 0; i < arrayOfIds.length; i++) {
-      const category = new Category().assignProperties(arrayOfIds[i]);
+      const categoryObj = Category.fetchCategoryInfo(arrayOfIds[i]);
+      console.log(categoryObj)
+      const category = new Category(categoryObj.id, categoryObj.name, categoryObj.clues);
       categories.push(category);
     }
     return categories

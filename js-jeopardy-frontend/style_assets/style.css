@@ -13,6 +13,28 @@ body {
   margin-right: auto;
 }
 
+.game-container {
+  background-color: black;
+  display: flex;
+  justify-content: center;
+  width: 1100px;
+  height: 120px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.clue-container {
+  background-color: black;
+  display: inline-flex;
+  flex-direction: column;
+  justify-content: center;
+  position: relative;
+}
+
+.clue-container#box-1 {
+  margin-left: 120px;
+}
+
 .bubble {
   border-radius: 25px;
   background-color: blue;
@@ -24,21 +46,34 @@ body {
 }
 
 .category-bubble {
-  border-radius: 25px;
-  display: inline-block;
+  border-radius: 12px;
   background-color: blue;
   text-align: center;
-  width: 70px;
-  height: 50px;
+  word-wrap: normal;
+  margin-left: 10px;
+  margin-right: 10px;
+  padding-top: 30px;
+  width: 140px;
+  height: 80px;
 }
 
+
+
 .clue-bubble {
-  border-radius: 25px;
-  display: inline-block;
+  border-radius: 12px;
   background-color: blue;
+  font: arial;
+  font-weight: bolder;
+  font-size: 30pt;
+  color: #F6D629;
   text-align: center;
-  width: 70px;
-  height: 50px;
+  width: 140px;
+  height: 80px;
+  margin-left: 10px;
+  margin-right: 10px;
+  margin-top: 10px;
+  margin-bottom: 10px;
+  padding-top: 30px;
 }
 
 .bubble#master-bubble {
