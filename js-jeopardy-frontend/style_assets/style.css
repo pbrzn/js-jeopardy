@@ -14,7 +14,7 @@ body {
   margin-right: auto;
 }
 
-.score {
+#score {
   width: 50%;
   margin: 0 auto;
   font: arial;
@@ -23,9 +23,9 @@ body {
 
 .game-container {
   width: 50%;
-  margin: 0 auto;
-  /* margin-left: auto;
-  margin-right: auto; */
+  /* margin: 0 auto; */
+  margin-left: auto;
+  margin-right: auto;
 }
 
 .category-column {
@@ -90,7 +90,13 @@ body {
 }
 
 .bubble#master-bubble {
-  display: flex;
+  display: block;
+  width: 700px;
+  height: 500px;
+}
+
+.bubble#selected-clue-bubble {
+  display: block;
   width: 700px;
   height: 500px;
 }

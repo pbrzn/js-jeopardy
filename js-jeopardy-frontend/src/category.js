@@ -9,6 +9,17 @@ class Category {
     return this.clues.map(clue => clue.id)
   }
 
+  // persistCategoryData() {
+  //   const categoryColumn = document.createElement("div");
+  //   categoryColumn.className = "category-column"
+  //   gameContainer.appendChild(categoryColumn)
+  //   let categoryBubble = document.createElement("div");
+  //   categoryBubble.className = "category-bubble";
+  //   categoryBubble.id = `category-${category.id}`;
+  //   categoryBubble.innerHTML = category.name;
+  //   categoryColumn.appendChild(categoryBubble);
+  // }
+
   static arrayOfIds() {
     const arr = []
     fetch("http://localhost:3000/categories")

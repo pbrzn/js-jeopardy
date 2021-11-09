@@ -3,16 +3,19 @@ let game;
 let clue;
 let category;
 let clueToRender;
-let categoryIdArray = Category.arrayOfIds();
+const answeredClues = [];
+const categoryIdArray = Category.arrayOfIds();
+const allCategoryInstances = [];
+let scoreDiv;
 
 const container = document.getElementById("container")
-const masterBubble = document.createElement("div");
-masterBubble.className = "bubble";
-masterBubble.id = "master-bubble";
+const menuBubble = document.createElement("div");
+menuBubble.className = "bubble";
+menuBubble.id = "master-bubble";
 
 //START MENU ON DOMContentLoaded
 document.addEventListener("DOMContentLoaded", () => {
-  container.appendChild(masterBubble)
+  container.appendChild(menuBubble)
   createStartMenu();
   const start = document.getElementById("start")
 
@@ -32,7 +35,7 @@ document.addEventListener("DOMContentLoaded", () => {
     .then(resp => resp.json())
     .then(function(json) {
       game = new Game(json.id, json.categories, json.clues, json.score)
-      container.removeChild(masterBubble);
+      container.removeChild(menuBubble);
       buildGame(game);
     })
   })
@@ -42,7 +45,7 @@ function createStartMenu() {
   const welcomeDiv = document.createElement("div");
   welcomeDiv.className = "bubble-text";
   welcomeDiv.id = "welcome";
-  masterBubble.appendChild(welcomeDiv);
+  menuBubble.appendChild(welcomeDiv);
 
   const p1 = document.createElement("p");
   p1.innerHTML = "WELCOME TO JAVASCRIPT JEOPARDY!"
@@ -55,11 +58,10 @@ function createStartMenu() {
 }
 
 function buildGame(gameObj) {
-  const score = gameObj.score;
   const categories = gameObj.categories;
-  const scoreDiv = document.createElement("div");
-  scoreDiv.className = "score";
-  scoreDiv.innerText = "CURRENT SCORE: $" + score;
+  scoreDiv = document.createElement("div");
+  scoreDiv.id = "score";
+  scoreDiv.innerText = "CURRENT SCORE: $" + gameObj.score;
   container.appendChild(scoreDiv);
   renderBoard(categories);
 }
@@ -73,7 +75,8 @@ function renderBoard(categoriesArray) {
     fetch(`http://localhost:3000/categories/${categoriesArray[i].id}`)
     .then(resp => resp.json())
     .then(function(json) {
-      category = new Category(json.id, json.name, json.clues)
+      category = allCategoryInstances.find(c => c.id === json.id) ? allCategoryInstances.find(c => c.id === json.id) : new Category(json.id, json.name, json.clues);
+      category.persistCategoryData();
       const categoryColumn = document.createElement("div");
       categoryColumn.className = "category-column"
       gameContainer.appendChild(categoryColumn)
@@ -94,10 +97,9 @@ function renderBoard(categoriesArray) {
         categoryColumn.appendChild(clueBubble);
       }
       const allClueBubbles = document.querySelectorAll(".clue-bubble");
-      console.log(allClueBubbles)
       allClueBubbles.forEach((clueBubble, i) => {
         clueBubble.addEventListener("click", () => {
-          container.removeChild(gameContainer)
+          gameContainer.remove()
           clueContainers = document.querySelectorAll(".clue-container");
           clueContainers.forEach(c => container.removeChild(c))
           renderClue(clueBubble.id);
@@ -111,29 +113,86 @@ function renderBoard(categoriesArray) {
 //ONCE A CLUE IS CLICKED ON IT WILL RENDER THAT CLUE'S QUESTION
 //AND A TEXT INPUT BAR IN THE MASTER BUBBLE
 function renderClue(clueId) {
-  console.log(clueId)
   fetch(`http://localhost:3000/clues/${clueId}`)
   .then(resp => resp.json())
   .then(function(json) {
     clueToRender = new Clue(json.id, json.value, json.question, json.answer);
+    clueToRender.persistClueData();
+    
+    const selectedClueBubble = document.createElement("div")
+    selectedClueBubble.className = "bubble"
+    selectedClueBubble.id = "selected-clue-bubble"
+    discardState()
+    container.appendChild(selectedClueBubble);
 
-    container.appendChild(masterBubble);
-    masterBubble.removeChild(document.querySelector("div#welcome.bubble-text"))
     const questionDiv = document.createElement("div");
-    questionDiv.className = "question";
+    questionDiv.id = "question";
     questionDiv.innerHTML = clueToRender.question;
-    masterBubble.appendChild(questionDiv);
+    selectedClueBubble.appendChild(questionDiv);
 
-    const answerDiv = document.createElement("div");
-    answerDiv.id = "form-container";
-    masterBubble.appendChild(answerDiv);
     const answerForm = document.createElement("form");
     answerForm.id = "answer";
-    answerDiv.appendChild(answerForm);
-    const answerLabel = document.createElement("label#answer-input")
-    const answerInput = document.createElement("input#answer-input")
-    answerLabel.innerText = "What is...?"
+    selectedClueBubble.appendChild(answerForm);
+
+    const answerLabel = document.createElement("label");
+    answerLabel.id = "answer-label"
+    answerLabel.innerText = "What is...? ";
+
+    const answerInput = document.createElement("input");
+    answerInput.id = "answer-input"
+    // answerInput.value == "";
+
+    const answerSubmit = document.createElement("input");
+    answerSubmit.type = "submit"
+    answerSubmit.id = "answer-submit"
+    answerSubmit.innerText = "Submit Answer"
+
+    answerForm.appendChild(answerLabel)
+    answerForm.appendChild(answerInput)
+    answerForm.appendChild(answerSubmit)
+
+    answerForm.addEventListener("submit", (e) => {
+      e.preventDefault();
+      if (clueToRender.answer.includes(answerInput.value.toUpperCase())) {
+        clueToRender.answered = true;
+        game.score += clueToRender.value
+        updateGame()
+      } else {
+        clueToRender.answered = false;
+        game.score -= clueToRender.value
+        updateGame()
+      }
+    })
 
   })
   .catch(error => console.log(error))
+}
+
+function updateGame() {
+  const updateData = { score: game.score }
+
+  const configObj = {
+    method: "PATCH",
+    headers: {
+      "Content-type": "application/json",
+      "Accept": "application/json"
+    },
+    body: JSON.stringify(updateData)
+  }
+
+  fetch(`http://localhost:3000/games/${game.id}`, configObj)
+  .then(resp => resp.json())
+  .then(function(json) {
+    clueToRender.answeredCorrectly = true;
+    scoreDiv.innerText = "CURRENT SCORE: $" + game.score;
+    answeredClues.push(clueToRender);
+    discardState();
+    window.setTimeout(renderBoard(allCategoryInstances), 10000);
+  })
+  .catch(error => console.log(error))
+}
+
+function discardState() {
+  container.innerHTML = '<img id="logo" src="style_assets/Jeopardy!_logo.png">';
+  // container.appendChild(scoreDiv);
 }
