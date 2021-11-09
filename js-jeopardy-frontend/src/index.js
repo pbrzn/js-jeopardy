@@ -10,10 +10,6 @@ const masterBubble = document.createElement("div");
 masterBubble.className = "bubble";
 masterBubble.id = "master-bubble";
 
-// let gameStarted = false;
-// let clueEngaged = false;
-// const categories = [];
-
 //START MENU ON DOMContentLoaded
 document.addEventListener("DOMContentLoaded", () => {
   container.appendChild(masterBubble)
@@ -65,30 +61,14 @@ function buildGame(gameObj) {
   scoreDiv.className = "score";
   scoreDiv.innerText = "CURRENT SCORE: $" + score;
   container.appendChild(scoreDiv);
-  renderCategoriesWithClues(categories);
+  renderBoard(categories);
 }
 
-function renderClue(clueId) {
-  console.log(clueId)
-  fetch(`http://localhost:3000/clues/${clueId}`)
-  .then(resp => resp.json())
-  .then(function(json) {
-    clueToRender = new Clue(json.id, json.value, json.question, json.answer);
-    container.appendChild(masterBubble);
-    masterBubble.removeChild(document.querySelector("div#welcome.bubble-text"))
-    const questionDiv = document.createElement("div");
-    questionDiv.className = "question";
-    questionDiv.innerHTML = clueToRender.question;
-    masterBubble.appendChild(questionDiv);
-
-  })
-  .catch(error => console.log(error))
-}
-
-function renderCategoriesWithClues(categoriesArray) {
+function renderBoard(categoriesArray) {
   const gameContainer = document.createElement("div.game-container");
   container.appendChild(gameContainer)
 
+  //RENDER ALL CATEGORIES WITH COLUMNS FOR THAT EACH CATEGORY'S CLUES
   for (let i = 0; i < categoriesArray.length; i++) {
     fetch(`http://localhost:3000/categories/${categoriesArray[i].id}`)
     .then(resp => resp.json())
@@ -103,6 +83,7 @@ function renderCategoriesWithClues(categoriesArray) {
       categoryBubble.innerHTML = category.name;
       categoryColumn.appendChild(categoryBubble);
 
+    //RENDER EACH CLUE WITH DOLLAR VALUE AND ONCLICK EVENT LISTENER
       const clues = category.clues
       for (let i = 0; i < clues.length; i++) {
         clue = clues[i]
@@ -124,4 +105,35 @@ function renderCategoriesWithClues(categoriesArray) {
       })
     });
   }
+}
+
+
+//ONCE A CLUE IS CLICKED ON IT WILL RENDER THAT CLUE'S QUESTION
+//AND A TEXT INPUT BAR IN THE MASTER BUBBLE
+function renderClue(clueId) {
+  console.log(clueId)
+  fetch(`http://localhost:3000/clues/${clueId}`)
+  .then(resp => resp.json())
+  .then(function(json) {
+    clueToRender = new Clue(json.id, json.value, json.question, json.answer);
+
+    container.appendChild(masterBubble);
+    masterBubble.removeChild(document.querySelector("div#welcome.bubble-text"))
+    const questionDiv = document.createElement("div");
+    questionDiv.className = "question";
+    questionDiv.innerHTML = clueToRender.question;
+    masterBubble.appendChild(questionDiv);
+
+    const answerDiv = document.createElement("div");
+    answerDiv.id = "form-container";
+    masterBubble.appendChild(answerDiv);
+    const answerForm = document.createElement("form");
+    answerForm.id = "answer";
+    answerDiv.appendChild(answerForm);
+    const answerLabel = document.createElement("label#answer-input")
+    const answerInput = document.createElement("input#answer-input")
+    answerLabel.innerText = "What is...?"
+
+  })
+  .catch(error => console.log(error))
 }
