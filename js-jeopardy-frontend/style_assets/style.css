@@ -9,16 +9,31 @@ body {
   background-color: black;
   width: 1200px;
   height: 1200px;
+  justify-content: center;
   margin-left: auto;
   margin-right: auto;
 }
 
+.score {
+  width: 50%;
+  margin: 0 auto;
+  font: arial;
+  font-size: 20pt;
+}
+
 .game-container {
+  width: 50%;
+  margin: 0 auto;
+  /* margin-left: auto;
+  margin-right: auto; */
+}
+
+.category-column {
   background-color: black;
-  display: flex;
+  display: inline-block;
   justify-content: center;
-  width: 1100px;
-  height: 120px;
+  width: 150px;
+  /* height: 1100px; */
   margin-left: auto;
   margin-right: auto;
 }
@@ -29,10 +44,6 @@ body {
   flex-direction: column;
   justify-content: center;
   position: relative;
-}
-
-.clue-container#box-1 {
-  margin-left: 120px;
 }
 
 .bubble {
@@ -48,11 +59,13 @@ body {
 .category-bubble {
   border-radius: 12px;
   background-color: blue;
+  /* display: inline; */
   text-align: center;
-  word-wrap: normal;
-  margin-left: 10px;
-  margin-right: 10px;
-  padding-top: 30px;
+  word-wrap: break-word;
+  font-size: 16pt;
+  margin-top: 10px;
+  margin-bottom: 10px;
+  padding: 20px 0;
   width: 140px;
   height: 80px;
 }
@@ -102,4 +115,9 @@ body {
 
 .bubble-text#welcome {
   font-size: 40pt;
+}
+
+.question {
+  font-size: 30pt;
+  padding: 70px 0;
 }

@@ -1,25 +1,25 @@
 class Clue {
-  constructor(id) {
-    this.id = id
-    const clue = this;
-
-    fetch(`http://localhost:3000/clues/${id}`)
-    .then(resp => resp.json())
-    .then(function(json) {
-      clue.value = json.value;
-      clue.question = json.question;
-      clue.answer = json.answer;
-    })
+  constructor(id, value, question, answer, answerCorrect = null) {
+    this.id = id;
+    this.value = value;
+    this.question = question;
+    this.answer = answer;
+    this.answerCorrect = null;
   }
 
-  static buildCluesFromCategory(category) {
-    const clues = []
-    const ids = category.clues.map(clue => clue.id)
-    for (let i = 0; i < ids.length; i++) {
-      const clue = new Clue(ids[i]);
-      clues.push(clue)
-    }
-    return clues;
+  static findById(id) {
+    return Clue.all.find(c => c.id === id)
   }
+
+
+  // static buildCluesFromCategory(category) {
+  //   const clues = []
+  //   const ids = category.clues.map(clue => clue.id)
+  //   for (let i = 0; i < ids.length; i++) {
+  //     const clue = new Clue(ids[i]);
+  //     clues.push(clue)
+  //   }
+  //   return clues;
+  // }
 
 }
