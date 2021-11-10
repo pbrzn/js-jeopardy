@@ -218,13 +218,14 @@ function persistData(category) {
   const allClueBubbles = document.querySelectorAll(".clue-bubble");
   for (let i = 0; i < allClueBubbles.length; i++) {
     let clueBubble = allClueBubbles[i];
-    if (!answeredClues.find(c => c.id === clueBubble.id)) {
-      clueBubble.addEventListener("click", () => {
-        gameContainer.remove()
-        clueContainers = document.querySelectorAll(".clue-container");
-        clueContainers.forEach(c => container.removeChild(c))
-        renderClue(clueBubble.id);
-      })
-    }
+    clueBubble.addEventListener("click", () => {
+      gameContainer.remove()
+      clueContainers = document.querySelectorAll(".clue-container");
+      clueContainers.forEach(c => container.removeChild(c))
+      renderClue(clueBubble.id);
+      if(answeredClues.find(c => c.id === clueBubble.id)) {
+        this.removeEventListener('click',arguments.callee,false);
+      }
+    })
   }
 }
