@@ -103,60 +103,60 @@ function renderBoard(gameObj) {
 //ONCE A CLUE IS CLICKED ON IT WILL RENDER THAT CLUE'S QUESTION
 //AND A TEXT INPUT BAR IN THE MASTER BUBBLE
 function renderClue(clueId) {
-  fetch(`http://localhost:3000/clues/${clueId}`)
-  .then(resp => resp.json())
-  .then(function(json) {
-    clueToRender = new Clue(json.id, json.value, json.question, json.answer);
+  if (!answeredClues.find(c => c.id === clueId)) {
+    fetch(`http://localhost:3000/clues/${clueId}`)
+    .then(resp => resp.json())
+    .then(function(json) {
+      clueToRender = new Clue(json.id, json.value, json.question, json.answer);
 
-    const selectedClueBubble = document.createElement("div")
-    selectedClueBubble.className = "bubble"
-    selectedClueBubble.id = "selected-clue-bubble"
-    discardState()
-    container.appendChild(selectedClueBubble);
+      const selectedClueBubble = document.createElement("div")
+      selectedClueBubble.className = "bubble"
+      selectedClueBubble.id = "selected-clue-bubble"
+      discardState()
+      container.appendChild(selectedClueBubble);
 
-    const questionDiv = document.createElement("div");
-    questionDiv.id = "question";
-    questionDiv.innerHTML = clueToRender.question;
-    selectedClueBubble.appendChild(questionDiv);
+      const questionDiv = document.createElement("div");
+      questionDiv.id = "question";
+      questionDiv.innerHTML = clueToRender.question;
+      selectedClueBubble.appendChild(questionDiv);
 
-    const answerForm = document.createElement("form");
-    answerForm.id = "answer";
-    selectedClueBubble.appendChild(answerForm);
+      const answerForm = document.createElement("form");
+      answerForm.id = "answer";
+      selectedClueBubble.appendChild(answerForm);
 
-    const answerLabel = document.createElement("label");
-    answerLabel.id = "answer-label"
-    answerLabel.innerText = "What is...? ";
+      const answerLabel = document.createElement("label");
+      answerLabel.id = "answer-label"
+      answerLabel.innerText = "What is...? ";
 
-    const answerInput = document.createElement("input");
-    answerInput.id = "answer-input"
+      const answerInput = document.createElement("input");
+      answerInput.id = "answer-input"
 
 
-    const answerSubmit = document.createElement("input");
-    answerSubmit.type = "submit"
-    answerSubmit.id = "answer-submit"
-    answerSubmit.innerText = "Submit Answer"
+      const answerSubmit = document.createElement("input");
+      answerSubmit.type = "submit"
+      answerSubmit.id = "answer-submit"
+      answerSubmit.innerText = "Submit Answer"
 
-    answerForm.appendChild(answerLabel)
-    answerForm.appendChild(answerInput)
-    answerForm.appendChild(answerSubmit)
+      answerForm.appendChild(answerLabel)
+      answerForm.appendChild(answerInput)
+      answerForm.appendChild(answerSubmit)
 
-    answerForm.addEventListener("submit", (e) => {
-      e.preventDefault();
-      if (clueToRender.answer.includes(answerInput.value.toUpperCase())) {
-        // clueToRender.answered = true;
-        clueToRender.answeredCorrectly = true;
-        game.score += clueToRender.value
-        updateGame()
-      } else {
-        // clueToRender.answered = true;
-        clueToRender.answeredCorrectly = false;
-        game.score -= clueToRender.value
-        updateGame()
-      }
+      answerForm.addEventListener("submit", (e) => {
+        e.preventDefault();
+        if (clueToRender.answer.includes(answerInput.value.toUpperCase())) {
+          clueToRender.answeredCorrectly = true;
+          game.score += clueToRender.value
+          updateGame()
+        } else {
+          clueToRender.answeredCorrectly = false;
+          game.score -= clueToRender.value
+          updateGame()
+        }
+      })
+
     })
-
-  })
-  .catch(error => console.log(error))
+    .catch(error => console.log(error))
+  }
 }
 
 function updateGame() {
@@ -203,7 +203,6 @@ function persistData(category) {
   categoryBubble.innerHTML = category.name;
   categoryColumn.appendChild(categoryBubble);
 
-//RENDER EACH CLUE WITH DOLLAR VALUE AND ONCLICK EVENT LISTENER
   const clues = category.clues
   for (let i = 0; i < clues.length; i++) {
     clue = clues[i]
@@ -217,14 +216,13 @@ function persistData(category) {
   }
   const allClueBubbles = document.querySelectorAll(".clue-bubble");
   for (let i = 0; i < allClueBubbles.length; i++) {
-    let clueBubble = allClueBubbles[i];
-    clueBubble.addEventListener("click", () => {
-      gameContainer.remove()
-      clueContainers = document.querySelectorAll(".clue-container");
-      clueContainers.forEach(c => container.removeChild(c))
+    const clueBubble = allClueBubbles[i];
+    clueBubble.addEventListener("click", function handler(e) {
+      e.preventDefault()
+      discardState();
       renderClue(clueBubble.id);
       if(answeredClues.find(c => c.id === clueBubble.id)) {
-        this.removeEventListener('click',arguments.callee,false);
+        clueBubble.removeEventListener('click', handler);
       }
     })
   }
