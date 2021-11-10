@@ -1,17 +1,20 @@
 //GLOBAL VARIABLES
 let game;
 let clue;
-let category;
 let clueToRender;
 const answeredClues = [];
 const categoryIdArray = Category.arrayOfIds();
 const allCategoryInstances = [];
 let scoreDiv;
+let counter = 1;
 
-const container = document.getElementById("container")
+let container = document.getElementById("container")
 const menuBubble = document.createElement("div");
 menuBubble.className = "bubble";
 menuBubble.id = "master-bubble";
+
+let gameContainer = document.createElement("div.game-container");
+gameContainer.id = "1"
 
 //START MENU ON DOMContentLoaded
 document.addEventListener("DOMContentLoaded", () => {
@@ -36,7 +39,7 @@ document.addEventListener("DOMContentLoaded", () => {
     .then(function(json) {
       game = new Game(json.id, json.categories, json.clues, json.score)
       container.removeChild(menuBubble);
-      buildGame(game);
+      renderBoard(game);
     })
   })
 })
@@ -57,55 +60,42 @@ function createStartMenu() {
   welcomeDiv.appendChild(p2)
 }
 
-function buildGame(gameObj) {
+// function buildGame(gameObj) {
+//   renderBoard(categories);
+// }
+
+function dataToInstancesOfCategories(gameObj) {
+  const categories = gameObj.categories;
+  for (let i = 0; i < categories.length; i++) {
+    fetch(`http://localhost:3000/categories/${categories[i].id}`)
+    .then(resp => resp.json())
+    .then(function(json) {
+      let category = new Category(json.id, json.name, json.clues);
+      allCategoryInstances.push(category)
+    });
+  }
+}
+
+function renderBoard(gameObj) {
   const categories = gameObj.categories;
   scoreDiv = document.createElement("div");
   scoreDiv.id = "score";
   scoreDiv.innerText = "CURRENT SCORE: $" + gameObj.score;
   container.appendChild(scoreDiv);
-  renderBoard(categories);
-}
-
-function renderBoard(categoriesArray) {
-  const gameContainer = document.createElement("div.game-container");
   container.appendChild(gameContainer)
-
-  //RENDER ALL CATEGORIES WITH COLUMNS FOR THAT EACH CATEGORY'S CLUES
-  for (let i = 0; i < categoriesArray.length; i++) {
-    fetch(`http://localhost:3000/categories/${categoriesArray[i].id}`)
-    .then(resp => resp.json())
-    .then(function(json) {
-      category = allCategoryInstances.find(c => c.id === json.id) ? allCategoryInstances.find(c => c.id === json.id) : new Category(json.id, json.name, json.clues);
-      category.persistCategoryData();
-      const categoryColumn = document.createElement("div");
-      categoryColumn.className = "category-column"
-      gameContainer.appendChild(categoryColumn)
-      let categoryBubble = document.createElement("div");
-      categoryBubble.className = "category-bubble";
-      categoryBubble.id = `category-${category.id}`;
-      categoryBubble.innerHTML = category.name;
-      categoryColumn.appendChild(categoryBubble);
-
-    //RENDER EACH CLUE WITH DOLLAR VALUE AND ONCLICK EVENT LISTENER
-      const clues = category.clues
-      for (let i = 0; i < clues.length; i++) {
-        clue = clues[i]
-        let clueBubble = document.createElement("div");
-        clueBubble.id = clue.id;
-        clueBubble.className = "clue-bubble";
-        clueBubble.innerHTML = "$" + clue.value;
-        categoryColumn.appendChild(clueBubble);
-      }
-      const allClueBubbles = document.querySelectorAll(".clue-bubble");
-      allClueBubbles.forEach((clueBubble, i) => {
-        clueBubble.addEventListener("click", () => {
-          gameContainer.remove()
-          clueContainers = document.querySelectorAll(".clue-container");
-          clueContainers.forEach(c => container.removeChild(c))
-          renderClue(clueBubble.id);
-        })
-      })
-    });
+  for (let i = 0; i < categories.length; i++) {
+    let category = allCategoryInstances.find((c) => c.id === categories[i].id)
+    if (!!category) {
+      persistData(category)
+    } else {
+      fetch(`http://localhost:3000/categories/${categories[i].id}`)
+      .then(resp => resp.json())
+      .then(function(json) {
+        let category = new Category(json.id, json.name, json.clues);
+        allCategoryInstances.push(category)
+        persistData(category)
+      });
+    }
   }
 }
 
@@ -117,8 +107,7 @@ function renderClue(clueId) {
   .then(resp => resp.json())
   .then(function(json) {
     clueToRender = new Clue(json.id, json.value, json.question, json.answer);
-    clueToRender.persistClueData();
-    
+
     const selectedClueBubble = document.createElement("div")
     selectedClueBubble.className = "bubble"
     selectedClueBubble.id = "selected-clue-bubble"
@@ -140,7 +129,7 @@ function renderClue(clueId) {
 
     const answerInput = document.createElement("input");
     answerInput.id = "answer-input"
-    // answerInput.value == "";
+
 
     const answerSubmit = document.createElement("input");
     answerSubmit.type = "submit"
@@ -154,11 +143,13 @@ function renderClue(clueId) {
     answerForm.addEventListener("submit", (e) => {
       e.preventDefault();
       if (clueToRender.answer.includes(answerInput.value.toUpperCase())) {
-        clueToRender.answered = true;
+        // clueToRender.answered = true;
+        clueToRender.answeredCorrectly = true;
         game.score += clueToRender.value
         updateGame()
       } else {
-        clueToRender.answered = false;
+        // clueToRender.answered = true;
+        clueToRender.answeredCorrectly = false;
         game.score -= clueToRender.value
         updateGame()
       }
@@ -183,16 +174,57 @@ function updateGame() {
   fetch(`http://localhost:3000/games/${game.id}`, configObj)
   .then(resp => resp.json())
   .then(function(json) {
-    clueToRender.answeredCorrectly = true;
+    clueToRender.answered = true;
     scoreDiv.innerText = "CURRENT SCORE: $" + game.score;
     answeredClues.push(clueToRender);
     discardState();
-    window.setTimeout(renderBoard(allCategoryInstances), 10000);
+    container.appendChild(scoreDiv);
+    gameContainer = document.createElement("div.game-container")
+    counter += 1;
+    gameContainer.id = `${counter}`
+    container.appendChild(gameContainer);
+    renderBoard(game)
   })
   .catch(error => console.log(error))
 }
 
 function discardState() {
   container.innerHTML = '<img id="logo" src="style_assets/Jeopardy!_logo.png">';
-  // container.appendChild(scoreDiv);
+  container.appendChild(scoreDiv);
+}
+
+function persistData(category) {
+  const categoryColumn = document.createElement("div");
+  categoryColumn.className = "category-column"
+  gameContainer.appendChild(categoryColumn)
+  let categoryBubble = document.createElement("div");
+  categoryBubble.className = "category-bubble";
+  categoryBubble.id = `category-${category.id}`;
+  categoryBubble.innerHTML = category.name;
+  categoryColumn.appendChild(categoryBubble);
+
+//RENDER EACH CLUE WITH DOLLAR VALUE AND ONCLICK EVENT LISTENER
+  const clues = category.clues
+  for (let i = 0; i < clues.length; i++) {
+    clue = clues[i]
+    let clueBubble = document.createElement("div");
+    clueBubble.id = clue.id;
+    clueBubble.className = "clue-bubble";
+    if (!answeredClues.find(c => c.id === clue.id)) {
+      clueBubble.innerHTML = "$" + clue.value;
+    }
+    categoryColumn.appendChild(clueBubble);
+  }
+  const allClueBubbles = document.querySelectorAll(".clue-bubble");
+  for (let i = 0; i < allClueBubbles.length; i++) {
+    let clueBubble = allClueBubbles[i];
+    if (!answeredClues.find(c => c.id === clueBubble.id)) {
+      clueBubble.addEventListener("click", () => {
+        gameContainer.remove()
+        clueContainers = document.querySelectorAll(".clue-container");
+        clueContainers.forEach(c => container.removeChild(c))
+        renderClue(clueBubble.id);
+      })
+    }
+  }
 }
