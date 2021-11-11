@@ -7,8 +7,8 @@ body {
 
 #container {
   background-color: black;
-  width: 1200px;
-  height: 1200px;
+  width: 1000px;
+  height: 1000px;
   justify-content: center;
   margin-left: auto;
   margin-right: auto;
@@ -16,26 +16,21 @@ body {
 
 #score {
   width: 50%;
+  text-align: center;
   margin: 0 auto;
   font: arial;
   font-size: 20pt;
-}
-
-.game-container {
-  width: 50%;
-  /* margin: 0 auto; */
-  margin-left: auto;
-  margin-right: auto;
 }
 
 .category-column {
   background-color: black;
   display: inline-block;
   justify-content: center;
-  width: 150px;
+  width: 16.66%;
   /* height: 1100px; */
-  margin-left: auto;
-  margin-right: auto;
+  margin: 0 auto;
+  /* margin-left: auto;
+  margin-right: auto; */
 }
 
 .clue-container {
@@ -61,12 +56,15 @@ body {
   background-color: blue;
   /* display: inline; */
   text-align: center;
-  word-wrap: break-word;
+  overflow-wrap: break-word;
+  hyphens: manual;
   font-size: 16pt;
   margin-top: 10px;
   margin-bottom: 10px;
+  margin-left: 10px;
+  margin-right: 10px;
   padding: 20px 0;
-  width: 140px;
+  width: auto;
   height: 80px;
 }
 
@@ -80,7 +78,7 @@ body {
   font-size: 30pt;
   color: #F6D629;
   text-align: center;
-  width: 140px;
+  width: auto;
   height: 80px;
   margin-left: 10px;
   margin-right: 10px;
@@ -99,6 +97,16 @@ body {
   display: block;
   width: 700px;
   height: 500px;
+  padding: 60px;
+}
+
+.question {
+  font-size: 30pt;
+  padding-bottom: 40px;
+}
+
+.answer {
+  font-size: 14pt;
 }
 
 #logo {

@@ -13,8 +13,8 @@ const menuBubble = document.createElement("div");
 menuBubble.className = "bubble";
 menuBubble.id = "master-bubble";
 
-let gameContainer = document.createElement("div.game-container");
-gameContainer.id = "1"
+// let gameContainer = document.createElement("div.game-container");
+// gameContainer.id = "container-1"
 
 //START MENU ON DOMContentLoaded
 document.addEventListener("DOMContentLoaded", () => {
@@ -56,7 +56,7 @@ function createStartMenu() {
 
   const p2 = document.createElement("p");
   p2.id = "start"
-  p2.innerHTML = "<u>READY TO PLAY?</u>"
+  p2.innerHTML = "<u>CLICK HERE TO PLAY</u>"
   welcomeDiv.appendChild(p2)
 }
 
@@ -64,17 +64,17 @@ function createStartMenu() {
 //   renderBoard(categories);
 // }
 
-function dataToInstancesOfCategories(gameObj) {
-  const categories = gameObj.categories;
-  for (let i = 0; i < categories.length; i++) {
-    fetch(`http://localhost:3000/categories/${categories[i].id}`)
-    .then(resp => resp.json())
-    .then(function(json) {
-      let category = new Category(json.id, json.name, json.clues);
-      allCategoryInstances.push(category)
-    });
-  }
-}
+// function dataToInstancesOfCategories(gameObj) {
+//   const categories = gameObj.categories;
+//   for (let i = 0; i < categories.length; i++) {
+//     fetch(`http://localhost:3000/categories/${categories[i].id}`)
+//     .then(resp => resp.json())
+//     .then(function(json) {
+//       let category = new Category(json.id, json.name, json.clues);
+//       allCategoryInstances.push(category)
+//     });
+//   }
+// }
 
 function renderBoard(gameObj) {
   const categories = gameObj.categories;
@@ -82,7 +82,7 @@ function renderBoard(gameObj) {
   scoreDiv.id = "score";
   scoreDiv.innerText = "CURRENT SCORE: $" + gameObj.score;
   container.appendChild(scoreDiv);
-  container.appendChild(gameContainer)
+  // container.appendChild(gameContainer)
   for (let i = 0; i < categories.length; i++) {
     let category = allCategoryInstances.find((c) => c.id === categories[i].id)
     if (!!category) {
@@ -113,15 +113,16 @@ function renderClue(clueId) {
       selectedClueBubble.className = "bubble"
       selectedClueBubble.id = "selected-clue-bubble"
       discardState()
+      container.appendChild(scoreDiv);
       container.appendChild(selectedClueBubble);
 
       const questionDiv = document.createElement("div");
-      questionDiv.id = "question";
+      questionDiv.className = "question";
       questionDiv.innerHTML = clueToRender.question;
       selectedClueBubble.appendChild(questionDiv);
 
       const answerForm = document.createElement("form");
-      answerForm.id = "answer";
+      answerForm.className = "answer";
       selectedClueBubble.appendChild(answerForm);
 
       const answerLabel = document.createElement("label");
@@ -143,7 +144,7 @@ function renderClue(clueId) {
 
       answerForm.addEventListener("submit", (e) => {
         e.preventDefault();
-        if (clueToRender.answer.includes(answerInput.value.toUpperCase())) {
+        if (answerInput.value !== "" && clueToRender.answer.includes(answerInput.value.toUpperCase())) {
           clueToRender.answeredCorrectly = true;
           game.score += clueToRender.value
           updateGame()
@@ -178,11 +179,11 @@ function updateGame() {
     scoreDiv.innerText = "CURRENT SCORE: $" + game.score;
     answeredClues.push(clueToRender);
     discardState();
-    container.appendChild(scoreDiv);
-    gameContainer = document.createElement("div.game-container")
-    counter += 1;
-    gameContainer.id = `${counter}`
-    container.appendChild(gameContainer);
+    // container.appendChild(scoreDiv);
+    // gameContainer = document.createElement("div.game-container")
+    // counter += 1;
+    // gameContainer.id = `container-${counter}`
+    // container.appendChild(gameContainer);
     renderBoard(game)
   })
   .catch(error => console.log(error))
@@ -190,13 +191,13 @@ function updateGame() {
 
 function discardState() {
   container.innerHTML = '<img id="logo" src="style_assets/Jeopardy!_logo.png">';
-  container.appendChild(scoreDiv);
+  // container.appendChild(scoreDiv);
 }
 
 function persistData(category) {
   const categoryColumn = document.createElement("div");
   categoryColumn.className = "category-column"
-  gameContainer.appendChild(categoryColumn)
+  container.appendChild(categoryColumn)
   let categoryBubble = document.createElement("div");
   categoryBubble.className = "category-bubble";
   categoryBubble.id = `category-${category.id}`;
