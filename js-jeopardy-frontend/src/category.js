@@ -1,9 +1,12 @@
 class Category {
-  constructor(id, name, clues) {
-    this.id = id;
-    this.name = name;
-    this.clues = clues;
+  constructor(categoryObj) {
+    this.id = categoryObj.id;
+    this.name = categoryObj.name;
+    this.clues = categoryObj.clues;
+    Category.all.push(this)
   }
+
+  static all = []
 
   static arrayOfIds() {
     const arr = []

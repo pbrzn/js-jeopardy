@@ -1,8 +1,11 @@
 class Game {
-  constructor(id, categories, clues, score) {
-    this.id = id;
-    this.categories = categories;
-    this.clues = clues;
-    this.score = score
+  constructor(gameObj) {
+    this.id = gameObj.id;
+    this.categories = gameObj.categories;
+    this.clues = gameObj.clues;
+    this.score = gameObj.score;
+    Game.all.push(this)
   }
+
+  static all = [];
 }

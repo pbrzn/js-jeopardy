@@ -1,5 +1,5 @@
 body {
-  background-color: gray;
+  background-color: #C80DFA;
   font-family: georgia;
   color: white;
   text-shadow: 2px 2px 4px #000000;
@@ -7,8 +7,9 @@ body {
 
 #container {
   background-color: black;
-  width: 1000px;
-  height: 1000px;
+  width: 1200px;
+  height: 925px;
+  /* max-height: 100%; */
   justify-content: center;
   margin-left: auto;
   margin-right: auto;
@@ -24,11 +25,12 @@ body {
 
 .category-column {
   background-color: black;
-  display: inline-block;
+  display: inline-table;
+  word-wrap: break-word;
   justify-content: center;
   width: 16.66%;
-  /* height: 1100px; */
-  margin: 0 auto;
+  min-height: 100%;
+  /* margin: 0 auto; */
   /* margin-left: auto;
   margin-right: auto; */
 }
@@ -38,7 +40,7 @@ body {
   display: inline-flex;
   flex-direction: column;
   justify-content: center;
-  position: relative;
+  /* position: relative; */
 }
 
 .bubble {
@@ -56,7 +58,7 @@ body {
   background-color: blue;
   /* display: inline; */
   text-align: center;
-  overflow-wrap: break-word;
+  word-wrap: break-word;
   hyphens: manual;
   font-size: 16pt;
   margin-top: 10px;
@@ -76,7 +78,7 @@ body {
   font: arial;
   font-weight: bolder;
   font-size: 30pt;
-  color: #F6D629;
+  color: gold;
   text-align: center;
   width: auto;
   height: 80px;
@@ -87,10 +89,11 @@ body {
   padding-top: 30px;
 }
 
-.bubble#master-bubble {
+.bubble#menu-bubble {
   display: block;
   width: 700px;
   height: 500px;
+  padding-top: 40px;
 }
 
 .bubble#selected-clue-bubble {
@@ -100,9 +103,19 @@ body {
   padding: 60px;
 }
 
+.bubble#game-over {
+  display: block;
+  font-size: 40pt;
+  padding: 70px 0;
+  width: 700px;
+  height: 500px;
+  padding: 60px;
+}
+
 .question {
   font-size: 30pt;
-  padding-bottom: 40px;
+  padding: 70px 0;
+  /* padding-bottom: 40px; */
 }
 
 .answer {
@@ -131,7 +144,13 @@ body {
   font-size: 40pt;
 }
 
-.question {
-  font-size: 30pt;
-  padding: 70px 0;
+.answer-status {
+  font-size: 24pt;
+  color: gold;
+  justify-content: center;
+  text-align: center;
+  display: flex;
+  margin-left: auto;
+  margin-right: auto;
+  /* padding: 70px 0; */
 }
