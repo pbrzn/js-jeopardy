@@ -24,4 +24,18 @@ class Category {
     })
     return arr;
   }
+
+  renderCategoryColumn() {
+    const div = document.createElement("div");
+    div.className = "category-column";
+    return div
+  }
+
+  renderCategoryBubble() {
+    const div = document.createElement("div");
+    div.className = "category-bubble";
+    div.id = this.id;
+    div.innerHTML = this.name;
+    return div
+  }
 }

@@ -4,15 +4,10 @@ let clueToRender;
 const categoryIdArray = Category.arrayOfIds();
 let scoreDiv;
 
-let container = document.getElementById("container")
-const menuBubble = document.createElement("div");
-menuBubble.className = "bubble";
-menuBubble.id = "menu-bubble";
+const container = document.getElementById("container")
 
 //START MENU ON DOMContentLoaded
 document.addEventListener("DOMContentLoaded", () => {
-  container.appendChild(menuBubble)
-  createStartMenu();
   const start = document.getElementById("start")
 
   start.addEventListener("click", startGame, false)
@@ -34,25 +29,9 @@ function startGame() {
   .then(resp => resp.json())
   .then(function(json) {
     game = new Game(json)
-    container.removeChild(menuBubble);
+    discardState()
     renderBoard(game);
   })
-}
-
-function createStartMenu() {
-  const welcomeDiv = document.createElement("div");
-  welcomeDiv.className = "bubble-text";
-  welcomeDiv.id = "welcome";
-  menuBubble.appendChild(welcomeDiv);
-
-  const p1 = document.createElement("p");
-  p1.innerHTML = "WELCOME TO JAVASCRIPT JEOPARDY!"
-  welcomeDiv.appendChild(p1)
-
-  const p2 = document.createElement("p");
-  p2.id = "start"
-  p2.innerHTML = "<u>CLICK HERE TO PLAY</u>"
-  welcomeDiv.appendChild(p2)
 }
 
 function gameOverWannaPlayAgain() {
@@ -210,14 +189,9 @@ function discardState() {
 }
 
 function persistData(category) {
-  const categoryColumn = document.createElement("div");
-  categoryColumn.className = "category-column"
-  container.appendChild(categoryColumn)
-  let categoryBubble = document.createElement("div");
-  categoryBubble.className = "category-bubble";
-  categoryBubble.id = `category-${category.id}`;
-  categoryBubble.innerHTML = category.name;
-  categoryColumn.appendChild(categoryBubble);
+  const categoryColumn = category.renderCategoryColumn();
+  container.appendChild(categoryColumn);
+  categoryColumn.appendChild(category.renderCategoryBubble());
 
   const clues = category.clues
   for (let i = 0; i < clues.length; i++) {
