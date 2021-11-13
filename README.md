@@ -1,24 +1,16 @@
-# README
+# JavaScript JEOPARDY!
 
-This README would normally document whatever steps are necessary to get the
-application up and running.
+JavaScript JEOPARDY! is a single-page web app in which, you guessed it, you can play a round of JEOPARDY!
 
-Things you may want to cover:
+## Usage
 
-* Ruby version
+### Installation And Startup
+* Fork and clone this repo.
+* Navigate to 'js-jeopardy-backend' in your terminal and run 'rails s' to engage the API.
+* Navigate to 'js-jeopardy-frontend' and run 'open index.html' to open the JavaScript JEOPARDY! page in your browser.
+* Simply click "CLICK HERE TO PLAY" to start the game.
 
-* System dependencies
-
-* Configuration
-
-* Database creation
-
-* Database initialization
-
-* How to run the test suite
-
-* Services (job queues, cache servers, search engines, etc.)
-
-* Deployment instructions
-
-* ...
+### Playing The Game
+* You will be presented with six categories and five clues for each category.Each clue will be listed by it's "dollar value".
+* Click on a clue to reveal it's question and a form to submit your answer.
+* If you have answered correctly, the clue's dollar value will be add to your score. If you have answered incorrectly, the dollar value will be taken away from your score.
