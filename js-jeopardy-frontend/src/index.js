@@ -1,7 +1,7 @@
 //GLOBAL VARIABLES
 let game;
 let clueToRender;
-const categoryIdArray = Category.arrayOfIds();
+let categoryIdArray = Category.arrayOfIds();
 let scoreDiv;
 
 const container = document.getElementById("container")
@@ -14,6 +14,10 @@ document.addEventListener("DOMContentLoaded", () => {
 })
 
 function startGame() {
+  if (Clue.answeredClues() === 30) {
+    Clue.answeredClues().forEach( clue => clue.answered = false);
+  }
+
   const data = Object.assign({}, { category_ids: categoryIdArray })
 
   const configObject = {
@@ -94,7 +98,7 @@ function renderClue(clueId) {
     fetch(`http://localhost:3000/clues/${clueId}`)
     .then(resp => resp.json())
     .then(function(json) {
-      clueToRender = new Clue(json.id, json.value, json.question, json.answer);
+      clueToRender = new Clue(json);
 
       const selectedClueBubble = document.createElement("div")
       selectedClueBubble.className = "bubble"
@@ -131,7 +135,7 @@ function renderClue(clueId) {
 
       answerForm.addEventListener("submit", (e) => {
         e.preventDefault();
-        if (answerInput.value !== ("" || "?") && clueToRender.answer.includes(answerInput.value.toUpperCase())) {
+        if (answerInput.value !== "" && answerInput.value !== "?" && answerInput.value.length > 1 && clueToRender.answer.includes(answerInput.value.toUpperCase())) {
           clueToRender.answeredCorrectly = true;
           game.score += clueToRender.value
           updateGame()
@@ -174,7 +178,8 @@ function updateGame() {
     scoreDiv.innerText = "CURRENT SCORE: $" + game.score;
     Clue.all.push(clueToRender);
     discardState();
-    if (Clue.all.length === 30){
+    if (Clue.answeredClues().length === 30){
+      container.appendChild(answerStatus)
       gameOverWannaPlayAgain();
     } else {
       container.appendChild(answerStatus);
@@ -195,18 +200,18 @@ function persistData(category) {
 
   const clues = category.clues
   for (let i = 0; i < clues.length; i++) {
-    let clue = clues[i]
+    const clue = clues[i]
     let clueBubble = document.createElement("div");
     clueBubble.id = clue.id;
     clueBubble.className = "clue-bubble";
-    if (!Clue.all.find(c => c.id === clue.id)) {
+    if (!Clue.answeredClues().find(c => c.id === clue.id)) {
       clueBubble.innerHTML = "$" + clue.value;
     } else {
       clueBubble.innerHTML = ""
     }
     categoryColumn.appendChild(clueBubble);
     clueBubble.addEventListener("click", function handler(e) {
-      if(!!Clue.all.find(c => c.id === parseInt((clueBubble.id), 10))) {
+      if(!!Clue.answeredClues().find(c => c.id === parseInt((clue.id), 10))) {
         clueBubble.removeEventListener("click", handler, false);
       } else {
         discardState();
