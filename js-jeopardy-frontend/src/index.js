@@ -100,51 +100,52 @@ function renderClue(clueId) {
     .then(function(json) {
       clueToRender = new Clue(json);
 
-      const selectedClueBubble = document.createElement("div")
-      selectedClueBubble.className = "bubble"
-      selectedClueBubble.id = "selected-clue-bubble"
+      // // const selectedClueBubble = document.createElement("div")
+      // selectedClueBubble.className = "bubble"
+      // selectedClueBubble.id = "selected-clue-bubble"
       discardState()
       container.appendChild(scoreDiv);
-      container.appendChild(selectedClueBubble);
-
-      const questionDiv = document.createElement("div");
-      questionDiv.className = "question";
-      questionDiv.innerHTML = clueToRender.question;
-      selectedClueBubble.appendChild(questionDiv);
-
-      const answerForm = document.createElement("form");
-      answerForm.className = "answer";
-      selectedClueBubble.appendChild(answerForm);
-
-      const answerLabel = document.createElement("label");
-      answerLabel.id = "answer-label"
-      answerLabel.innerText = "What is...? ";
-
-      const answerInput = document.createElement("input");
-      answerInput.id = "answer-input"
-
-
-      const answerSubmit = document.createElement("input");
-      answerSubmit.type = "submit"
-      answerSubmit.id = "answer-submit"
-      answerSubmit.innerText = "Submit Answer"
-
-      answerForm.appendChild(answerLabel)
-      answerForm.appendChild(answerInput)
-      answerForm.appendChild(answerSubmit)
-
-      answerForm.addEventListener("submit", (e) => {
-        e.preventDefault();
-        if (answerInput.value !== "" && answerInput.value !== "?" && answerInput.value.length > 1 && clueToRender.answer.includes(answerInput.value.toUpperCase())) {
-          clueToRender.answeredCorrectly = true;
-          game.score += clueToRender.value
-          updateGame()
-        } else {
-          clueToRender.answeredCorrectly = false;
-          game.score -= clueToRender.value
-          updateGame()
-        }
-      })
+      container.appendChild(clueToRender.render());
+      //
+      // const questionDiv = document.createElement("div");
+      // questionDiv.className = "question";
+      // questionDiv.innerHTML = clueToRender.question;
+      // selectedClueBubble.appendChild(questionDiv);
+      //
+      // const answerForm = document.createElement("form");
+      // answerForm.className = "answer";
+      // selectedClueBubble.appendChild(answerForm);
+      //
+      // const answerLabel = document.createElement("label");
+      // answerLabel.id = "answer-label"
+      // answerLabel.innerText = "What is...? ";
+      //
+      // const answerInput = document.createElement("input");
+      // answerInput.id = "answer-input"
+      //
+      //
+      // const answerSubmit = document.createElement("input");
+      // answerSubmit.type = "submit"
+      // answerSubmit.id = "answer-submit"
+      // answerSubmit.innerText = "Submit Answer"
+      //
+      // answerForm.appendChild(answerLabel)
+      // answerForm.appendChild(answerInput)
+      // answerForm.appendChild(answerSubmit)
+      // const answerForm = document.querySelector("form")
+      //
+      // answerForm.addEventListener("submit", (e) => {
+      //   e.preventDefault();
+      //   if (answerInput.value !== "" && answerInput.value !== "?" && answerInput.value.length > 1 && clueToRender.answer.includes(answerInput.value.toUpperCase())) {
+      //     clueToRender.answeredCorrectly = true;
+      //     game.score += clueToRender.value
+      //     updateGame()
+      //   } else {
+      //     clueToRender.answeredCorrectly = false;
+      //     game.score -= clueToRender.value
+      //     updateGame()
+      //   }
+      // })
 
     })
     .catch(error => console.log(error))

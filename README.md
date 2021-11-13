@@ -7,7 +7,7 @@ JavaScript JEOPARDY! is a single-page web app in which you can, you guessed it, 
 ### Installation And Startup
 * Fork and clone this repo.
 * Navigate to 'js-jeopardy-backend' in your terminal and run 'rails s' to engage the API.
-* Navigate to 'js-jeopardy-frontend' and run 'open index.html' to open the JavaScript JEOPARDY! page in your browser.
+* In a separate tab in your terminal, navigate to 'js-jeopardy-frontend' and run 'open index.html' to open the JavaScript JEOPARDY! page in your browser.
 * Simply click "CLICK HERE TO PLAY" to start the game.
 
 ### Playing The Game
