@@ -12,7 +12,14 @@ class Clue {
   answeredCorrectly = null;
 
   static answeredClues() {
-    return Clue.all.filter(clue => clue.answered === true)
+    return this.all.filter(clue => clue.answered === true)
+  }
+
+  static clearAnsweredClues() {
+    if (this.answeredClues().length === 30) {
+      this.answeredClues().forEach(clue => clue.answered = false);
+    }
+    return this.answeredClues()
   }
 
   render() {

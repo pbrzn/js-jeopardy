@@ -1,24 +1,34 @@
 //GLOBAL VARIABLES
 let game;
 let clueToRender;
-let categoryIdArray = Category.arrayOfIds();
+// let categoryIdArray = Category.arrayOfIds();
 let scoreDiv;
 
 const container = document.getElementById("container")
 
-//START MENU ON DOMContentLoaded
+const totalNumberOfCategories = Category.totalNumberOfCategories()
+
+let categoryIdArray = function(totalNumberOfCategories){
+  const arr = []
+  let counter = 6
+  while (counter > 0) {
+    let num = Math.ceil(Math.random() * totalNumberOfCategories[0])
+    if (!arr.includes(num)) {
+      arr.push(num)
+      counter--;
+    }
+  }
+  return arr;
+}
+
+
 document.addEventListener("DOMContentLoaded", () => {
   const start = document.getElementById("start")
-
   start.addEventListener("click", startGame, false)
 })
 
 function startGame() {
-  if (Clue.answeredClues() === 30) {
-    Clue.answeredClues().forEach( clue => clue.answered = false);
-  }
-
-  const data = Object.assign({}, { category_ids: categoryIdArray })
+  const data = Object.assign({}, {category_ids: categoryIdArray(totalNumberOfCategories)})
 
   const configObject = {
     method: "POST",
@@ -56,19 +66,6 @@ function gameOverWannaPlayAgain() {
   gameOverDiv.appendChild(p4)
   p4.addEventListener("click", startGame, false)
 }
-//
-// function parseGameObject(gameObj) {
-//   const categoryObjects = gameObj.categories;
-//   for (let i = 0; i < categoryObjects.length; i++) {
-//     fetch(`http://localhost:3000/categories/${categoryObjects[i].id}`)
-//     .then(resp => resp.json())
-//     .then(function(json) {
-//       let category = new Category(json);
-//       // persistData(category)
-//     });
-//   }
-// }
-
 
 function renderBoard(gameObj) {
   const categories = gameObj.categories;
@@ -99,54 +96,9 @@ function renderClue(clueId) {
     .then(resp => resp.json())
     .then(function(json) {
       clueToRender = new Clue(json);
-
-      // // const selectedClueBubble = document.createElement("div")
-      // selectedClueBubble.className = "bubble"
-      // selectedClueBubble.id = "selected-clue-bubble"
       discardState()
       container.appendChild(scoreDiv);
       container.appendChild(clueToRender.render());
-      //
-      // const questionDiv = document.createElement("div");
-      // questionDiv.className = "question";
-      // questionDiv.innerHTML = clueToRender.question;
-      // selectedClueBubble.appendChild(questionDiv);
-      //
-      // const answerForm = document.createElement("form");
-      // answerForm.className = "answer";
-      // selectedClueBubble.appendChild(answerForm);
-      //
-      // const answerLabel = document.createElement("label");
-      // answerLabel.id = "answer-label"
-      // answerLabel.innerText = "What is...? ";
-      //
-      // const answerInput = document.createElement("input");
-      // answerInput.id = "answer-input"
-      //
-      //
-      // const answerSubmit = document.createElement("input");
-      // answerSubmit.type = "submit"
-      // answerSubmit.id = "answer-submit"
-      // answerSubmit.innerText = "Submit Answer"
-      //
-      // answerForm.appendChild(answerLabel)
-      // answerForm.appendChild(answerInput)
-      // answerForm.appendChild(answerSubmit)
-      // const answerForm = document.querySelector("form")
-      //
-      // answerForm.addEventListener("submit", (e) => {
-      //   e.preventDefault();
-      //   if (answerInput.value !== "" && answerInput.value !== "?" && answerInput.value.length > 1 && clueToRender.answer.includes(answerInput.value.toUpperCase())) {
-      //     clueToRender.answeredCorrectly = true;
-      //     game.score += clueToRender.value
-      //     updateGame()
-      //   } else {
-      //     clueToRender.answeredCorrectly = false;
-      //     game.score -= clueToRender.value
-      //     updateGame()
-      //   }
-      // })
-
     })
     .catch(error => console.log(error))
   }
@@ -205,14 +157,14 @@ function persistData(category) {
     let clueBubble = document.createElement("div");
     clueBubble.id = clue.id;
     clueBubble.className = "clue-bubble";
-    if (!Clue.answeredClues().find(c => c.id === clue.id)) {
+    if (!Clue.answeredClues().find(c => c.id === clue.id && c.answered === true)) {
       clueBubble.innerHTML = "$" + clue.value;
     } else {
       clueBubble.innerHTML = ""
     }
     categoryColumn.appendChild(clueBubble);
     clueBubble.addEventListener("click", function handler(e) {
-      if(!!Clue.answeredClues().find(c => c.id === parseInt((clue.id), 10))) {
+      if(!!Clue.answeredClues().find(c => c.id === parseInt((clue.id), 10) && c.answered === true)) {
         clueBubble.removeEventListener("click", handler, false);
       } else {
         discardState();

@@ -8,19 +8,13 @@ class Category {
 
   static all = []
 
-  static arrayOfIds() {
+  static totalNumberOfCategories() {
     const arr = []
     fetch("http://localhost:3000/categories")
     .then(resp => resp.json())
     .then(function(json) {
-      let counter = 6
-      while (counter > 0) {
-        let num = Math.ceil(Math.random() * json.length)
-        if (!arr.includes(num)) {
-          arr.push(num)
-          counter--;
-        }
-      }
+      const num = json.length;
+      arr.push(num)
     })
     return arr;
   }
