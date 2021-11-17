@@ -1,7 +1,6 @@
 //GLOBAL VARIABLES
 let game;
 let clueToRender;
-// let categoryIdArray = Category.arrayOfIds();
 let scoreDiv;
 
 const container = document.getElementById("container")
@@ -42,9 +41,10 @@ function startGame() {
   fetch("http://localhost:3000/games", configObject)
   .then(resp => resp.json())
   .then(function(json) {
-    game = new Game(json)
-    discardState()
-    renderBoard(game);
+    game = new Game(json);
+    discardState();
+    game.parseGameData();
+    // renderBoard(game);
   })
 }
 
@@ -67,8 +67,20 @@ function gameOverWannaPlayAgain() {
   p4.addEventListener("click", startGame, false)
 }
 
+function parseGameData() {
+  const categories = this.categories;
+  for (let i = 0; i < categories.length; i++) {
+    fetch(`http://localhost:3000/categories/${categories[i].id}`)
+    .then(resp => resp.json())
+    .then(function(json) {
+      let category = new Category(json);
+      // persistData(category)
+    });
+  }
+}
+
 function renderBoard(gameObj) {
-  const categories = gameObj.categories;
+  // const categories = gameObj.categories;
   scoreDiv = document.createElement("div");
   scoreDiv.id = "score";
   scoreDiv.innerText = "CURRENT SCORE: $" + gameObj.score
