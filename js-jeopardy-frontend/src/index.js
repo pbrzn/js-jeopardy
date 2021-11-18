@@ -1,6 +1,6 @@
 let game;
 let clueToRender;
-let scoreDiv;
+// let scoreDiv;
 const totalNumberOfCategories = Category.totalNumberOfCategories()
 
 let categoryIdArray = function(totalNumberOfCategories){
@@ -46,11 +46,8 @@ function startGame() {
 }
 
 function renderBoard(gameObj) {
+  container.appendChild(gameObj.renderCurrentScore())
   const categories = gameObj.categories;
-  scoreDiv = document.createElement("div");
-  scoreDiv.id = "score";
-  scoreDiv.innerText = "CURRENT SCORE: $" + gameObj.score
-  container.appendChild(scoreDiv)
 
   for (let i = 0; i < categories.length; i++) {
     let category = Category.all.find((c) => c.id === parseInt(categories[i].id), 10)
@@ -75,7 +72,7 @@ function renderClue(clueId) {
     .then(function(json) {
       clueToRender = new Clue(json);
       discardState()
-      container.appendChild(scoreDiv);
+      container.appendChild(game.renderCurrentScore());
       container.appendChild(clueToRender.render());
     })
     .catch(error => console.log(error))
@@ -106,6 +103,7 @@ function updateGame() {
       answerStatus.innerHTML = `SORRY, THE CORRECT ANSWER IS: \"${clueToRender.answer}\"`
     }
     container.appendChild(answerStatus)
+    const scoreDiv = document.getElementById("score");
     scoreDiv.innerText = "CURRENT SCORE: $" + game.score;
     Clue.all.push(clueToRender);
     discardState();

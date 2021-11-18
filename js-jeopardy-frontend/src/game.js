@@ -4,7 +4,6 @@ class Game {
     this.categories = gameObj.categories;
     this.clues = gameObj.clues;
     this.score = gameObj.score;
-    // Game.all.push(this)
   }
 
   static all = [];
@@ -35,6 +34,13 @@ class Game {
     }
 
     return list
+  }
+
+  renderCurrentScore() {
+    const div = document.createElement("div");
+    div.id = "score";
+    div.innerText = "CURRENT SCORE: $" + this.score
+    return div
   }
 
 }
