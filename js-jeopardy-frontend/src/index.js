@@ -1,6 +1,5 @@
 let game;
 let clueToRender;
-// let scoreDiv;
 const totalNumberOfCategories = Category.totalNumberOfCategories()
 
 let categoryIdArray = function(totalNumberOfCategories){

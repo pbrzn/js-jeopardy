@@ -18,7 +18,7 @@ class Game {
   }
 
   static highScores() {
-    return this.all.filter(game => game.score > 10000).sort((a, b) => b > a);
+    return this.all.sort((a, b) => b.score - a.score).slice(0,5)
   }
 
   renderHighScores() {
@@ -27,7 +27,7 @@ class Game {
     const list = document.createElement("ol")
     list.className = "game-over-list"
 
-    for (let i = 0; i < 5; i++) {
+    for (let i = 0; i < array.length; i++) {
       let li = document.createElement("li");
       li.innerHTML = `GAME ${array[i].id}: $${array[i].score}`
       list.appendChild(li);
