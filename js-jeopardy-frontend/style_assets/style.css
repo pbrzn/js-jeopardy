@@ -112,6 +112,10 @@ body {
   padding: 60px;
 }
 
+.bubble#game-over ol{
+  font-size: 20pt;
+}
+
 .question {
   font-size: 30pt;
   padding: 70px 0;

@@ -1,10 +1,6 @@
-//GLOBAL VARIABLES
 let game;
 let clueToRender;
 let scoreDiv;
-
-const container = document.getElementById("container")
-
 const totalNumberOfCategories = Category.totalNumberOfCategories()
 
 let categoryIdArray = function(totalNumberOfCategories){
@@ -20,6 +16,8 @@ let categoryIdArray = function(totalNumberOfCategories){
   return arr;
 }
 
+Game.fetchAll();
+const container = document.getElementById("container")
 
 document.addEventListener("DOMContentLoaded", () => {
   const start = document.getElementById("start")
@@ -41,46 +39,14 @@ function startGame() {
   fetch("http://localhost:3000/games", configObject)
   .then(resp => resp.json())
   .then(function(json) {
-    game = new Game(json);
-    discardState();
-    game.parseGameData();
-    // renderBoard(game);
+    game = new Game(json)
+    discardState()
+    renderBoard(game);
   })
 }
 
-function gameOverWannaPlayAgain() {
-  const gameOverDiv = document.createElement("div");
-  gameOverDiv.className = "bubble";
-  gameOverDiv.id = "game-over";
-  container.appendChild(gameOverDiv);
-
-  const p3 = document.createElement("p");
-  p3.className = "game-over-text"
-  p3.innerHTML = "THE GAME IS OVER! \nYOUR FINAL SCORE IS: \n$" + game.score;
-  gameOverDiv.appendChild(p3)
-
-  const p4 = document.createElement("p");
-  p4.className = "game-over-text"
-  p4.id = "play-again"
-  p4.innerHTML = "<u>CLICK HERE TO PLAY AGAIN</u>"
-  gameOverDiv.appendChild(p4)
-  p4.addEventListener("click", startGame, false)
-}
-
-function parseGameData() {
-  const categories = this.categories;
-  for (let i = 0; i < categories.length; i++) {
-    fetch(`http://localhost:3000/categories/${categories[i].id}`)
-    .then(resp => resp.json())
-    .then(function(json) {
-      let category = new Category(json);
-      // persistData(category)
-    });
-  }
-}
-
 function renderBoard(gameObj) {
-  // const categories = gameObj.categories;
+  const categories = gameObj.categories;
   scoreDiv = document.createElement("div");
   scoreDiv.id = "score";
   scoreDiv.innerText = "CURRENT SCORE: $" + gameObj.score
@@ -145,7 +111,8 @@ function updateGame() {
     discardState();
     if (Clue.answeredClues().length === 30){
       container.appendChild(answerStatus)
-      gameOverWannaPlayAgain();
+      Game.fetchAll();
+      gameOver(Game.highScores());
     } else {
       container.appendChild(answerStatus);
       renderBoard(game);
@@ -184,4 +151,24 @@ function persistData(category) {
       }
     })
   }
+}
+
+function gameOver() {
+  const gameOverDiv = document.createElement("div");
+  gameOverDiv.className = "bubble";
+  gameOverDiv.id = "game-over";
+  container.appendChild(gameOverDiv);
+
+  const p3 = document.createElement("p");
+  p3.className = "game-over-text"
+  p3.innerHTML = "THE GAME IS OVER! \nYOUR FINAL SCORE IS: \n$" + game.score;
+  gameOverDiv.appendChild(p3)
+
+  const p4 = document.createElement("p");
+  p4.className = "game-over-text";
+  p4.innerHTML = "HERE ARE THE PREVIOUS HIGH SCORES";
+  gameOverDiv.appendChild(p4);
+
+  gameOverDiv.appendChild(game.renderHighScores());
+
 }
