@@ -34,7 +34,6 @@ function startGame() {
     },
     body: JSON.stringify(data)
   }
-
   fetch("http://localhost:3000/games", configObject)
   .then(resp => resp.json())
   .then(function(json) {
