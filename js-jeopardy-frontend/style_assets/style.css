@@ -1,5 +1,5 @@
 body {
-  background-color: #C80DFA;
+  background: linear-gradient(0deg, #61067A, #FA0DF1 50%, #61067A);
   font-family: georgia;
   color: white;
   text-shadow: 2px 2px 4px #000000;
@@ -9,7 +9,6 @@ body {
   background-color: black;
   width: 1200px;
   height: 925px;
-  /* max-height: 100%; */
   justify-content: center;
   margin-left: auto;
   margin-right: auto;
@@ -30,9 +29,6 @@ body {
   justify-content: center;
   width: 16.66%;
   min-height: 100%;
-  /* margin: 0 auto; */
-  /* margin-left: auto;
-  margin-right: auto; */
 }
 
 .clue-container {
@@ -40,7 +36,6 @@ body {
   display: inline-flex;
   flex-direction: column;
   justify-content: center;
-  /* position: relative; */
 }
 
 .bubble {
@@ -56,7 +51,6 @@ body {
 .category-bubble {
   border-radius: 12px;
   background-color: blue;
-  /* display: inline; */
   text-align: center;
   word-wrap: break-word;
   hyphens: manual;
@@ -119,7 +113,6 @@ body {
 .question {
   font-size: 30pt;
   padding: 70px 0;
-  /* padding-bottom: 40px; */
 }
 
 .answer {
@@ -156,5 +149,4 @@ body {
   display: flex;
   margin-left: auto;
   margin-right: auto;
-  /* padding: 70px 0; */
 }
