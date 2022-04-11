@@ -13,19 +13,24 @@ class Game {
     return fetch("http://localhost:3000/games")
       .then(resp => resp.json())
       .then(json => {
-        json.forEach(game => this.all.push(game))
-      })
+        json.forEach(game => this.all.push(game));
+      });
   }
 
   static highScores() {
-    return this.all.sort((a, b) => b.score - a.score).slice(0,5)
+    return this.all.sort((a, b) => b.score - a.score).slice(0,5);
+  }
+
+  sortCategories() {
+    this.categories.sort((a, b) => a.id - b.id);
+    return game;
   }
 
   renderHighScores() {
     const array = Game.highScores();
 
-    const list = document.createElement("ol")
-    list.className = "game-over-list"
+    const list = document.createElement("ol");
+    list.className = "game-over-list";
 
     for (let i = 0; i < array.length; i++) {
       let li = document.createElement("li");
@@ -33,14 +38,14 @@ class Game {
       list.appendChild(li);
     }
 
-    return list
+    return list;
   }
 
   renderCurrentScore() {
     const div = document.createElement("div");
     div.id = "score";
-    div.innerText = "CURRENT SCORE: $" + this.score
-    return div
+    div.innerText = "CURRENT SCORE: $" + this.score;
+    return div;
   }
 
 }

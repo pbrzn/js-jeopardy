@@ -6,18 +6,7 @@ class Category {
     Category.all.push(this)
   }
 
-  static all = []
-
-  static totalNumberOfCategories() {
-    const arr = []
-    fetch("http://localhost:3000/categories")
-    .then(resp => resp.json())
-    .then(function(json) {
-      const num = json.length;
-      arr.push(num)
-    })
-    return arr;
-  }
+  static all = [];
 
   renderCategoryColumn() {
     const div = document.createElement("div");

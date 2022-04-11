@@ -1,19 +1,5 @@
 let game;
 let clueToRender;
-const totalNumberOfCategories = Category.totalNumberOfCategories()
-
-let categoryIdArray = function(totalNumberOfCategories){
-  const arr = []
-  let counter = 6
-  while (counter > 0) {
-    let num = Math.ceil(Math.random() * totalNumberOfCategories[0])
-    if (!arr.includes(num)) {
-      arr.push(num)
-      counter--;
-    }
-  }
-  return arr;
-}
 
 Game.fetchAll();
 const container = document.getElementById("container")
@@ -24,7 +10,7 @@ document.addEventListener("DOMContentLoaded", () => {
 })
 
 function startGame() {
-  const data = Object.assign({}, {category_ids: categoryIdArray(totalNumberOfCategories)})
+  discardState()
 
   const configObject = {
     method: "POST",
@@ -32,14 +18,12 @@ function startGame() {
       "Content-type": "application/json",
       "Accept": "application/json"
     },
-    body: JSON.stringify(data)
   }
   fetch("http://localhost:3000/games", configObject)
   .then(resp => resp.json())
   .then(function(json) {
-    game = new Game(json)
-    discardState()
-    renderBoard(game);
+    game = new Game(json);
+    renderBoard(game.sortCategories());
   })
 }
 
