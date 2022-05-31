@@ -1,17 +1,21 @@
 body {
-  background: linear-gradient(0deg, #61067A, #FA0DF1 50%, #61067A);
+  background: linear-gradient(0deg, #61067A 0%, #FA0DF1 100%);
   font-family: georgia;
   color: white;
   text-shadow: 2px 2px 4px #000000;
+  /* min-height: 1030px; */
 }
 
 #container {
-  background-color: black;
+  background-color: #121212;
+  box-shadow: 4px 4px 8px #212121;
   width: 1200px;
-  height: 925px;
+  min-height: 1000px;
   justify-content: center;
+  padding-top: 10px;
   margin-left: auto;
   margin-right: auto;
+  border-radius: 17.5px;
 }
 
 #score {
@@ -23,12 +27,12 @@ body {
 }
 
 .category-column {
-  background-color: black;
+  background-color: #121212;
   display: inline-table;
   word-wrap: break-word;
   justify-content: center;
   width: 16.66%;
-  min-height: 100%;
+  /* min-height: 80%; */
 }
 
 .clue-container {
@@ -39,7 +43,7 @@ body {
 }
 
 .bubble {
-  border-radius: 25px;
+  border-radius: 10px;
   background-color: blue;
   margin-left: auto;
   margin-right: auto;
@@ -49,7 +53,7 @@ body {
 }
 
 .category-bubble {
-  border-radius: 12px;
+  border-radius: 5px;
   background-color: blue;
   text-align: center;
   word-wrap: break-word;
@@ -67,7 +71,7 @@ body {
 
 
 .clue-bubble {
-  border-radius: 12px;
+  border-radius: 5px;
   background-color: blue;
   font: arial;
   font-weight: bolder;
@@ -120,12 +124,19 @@ body {
 }
 
 #logo {
+  background-color: #6B6B6B;
   width: 395px;
   height: 116px;
   display: flex;
   margin-left: auto;
   margin-right: auto;
+  margin-bottom: 10px;
   padding: 20px;
+  border-color: gold;
+  border-width: 5px;
+  border-style: solid;
+  border-spacing: 2px;
+  border-radius: 20px;
 }
 
 .bubble-text {

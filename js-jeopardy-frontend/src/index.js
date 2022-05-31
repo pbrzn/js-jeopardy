@@ -1,7 +1,6 @@
 let game;
 let clueToRender;
 
-Game.fetchAll();
 const container = document.getElementById("container")
 
 document.addEventListener("DOMContentLoaded", () => {
@@ -23,24 +22,23 @@ function startGame() {
   .then(resp => resp.json())
   .then(function(json) {
     game = new Game(json);
-    renderBoard(game.sortCategories());
+    renderBoard(game);
   })
 }
 
 function renderBoard(gameObj) {
   container.appendChild(gameObj.renderCurrentScore())
   const categories = gameObj.categories;
-
   for (let i = 0; i < categories.length; i++) {
     let category = Category.all.find((c) => c.id === parseInt(categories[i].id), 10)
-    if (!!category) {
-    persistData(category)
+    if (category) {
+      persistData(category)
     } else {
       fetch(`http://localhost:3000/categories/${categories[i].id}`)
       .then(resp => resp.json())
       .then(function(json) {
         let category = new Category(json);
-        persistData(category)
+        persistData(category);
       });
     }
   }
@@ -134,6 +132,7 @@ function persistData(category) {
 }
 
 function gameOver() {
+  Game.fetchAll();
   const gameOverDiv = document.createElement("div");
   gameOverDiv.className = "bubble";
   gameOverDiv.id = "game-over";

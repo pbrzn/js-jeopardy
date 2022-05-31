@@ -9,7 +9,6 @@ class Game {
   static all = [];
 
   static fetchAll() {
-
     return fetch("http://localhost:3000/games")
       .then(resp => resp.json())
       .then(json => {
@@ -19,11 +18,6 @@ class Game {
 
   static highScores() {
     return this.all.sort((a, b) => b.score - a.score).slice(0,5);
-  }
-
-  sortCategories() {
-    this.categories.sort((a, b) => a.id - b.id);
-    return game;
   }
 
   renderHighScores() {
